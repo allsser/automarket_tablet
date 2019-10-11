@@ -3,9 +3,13 @@ package com.example.automarket;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +31,8 @@ public class ProductActivity extends AppCompatActivity {
     private DataOutputStream dos;
     PrintWriter out;
 
-    private String ip = "70.12.225.218";
-    private int port = 7848;
+    private String ip = "70.12.225.218"; //server연결 ip
+    private int port = 7848; //server연결 ip
 
     long now = System.currentTimeMillis();
     Date date = new Date(now);
@@ -42,10 +47,23 @@ public class ProductActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_product);
 
         dateNow = (TextView) findViewById(R.id.dateNow);
         dateNow.setText(formatDate);    // TextView 에 현재 시간 문자열 할당
+
+        Intent i = getIntent();
+        String searchKeyword = i.getStringExtra("searchKeyword");
+
+        if (searchKeyword != null) {
+            Intent send = new Intent();
+            ComponentName cname = new ComponentName("com.example.automarket",
+                    "com.example.automarket.SearchService");
+            send.setComponent(cname);
+            send.putExtra("searchKeyword", searchKeyword);
+            startService(send);
+        }
 
         new Thread(new Runnable() {
             @Override
@@ -62,6 +80,7 @@ public class ProductActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -84,6 +103,7 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
     }
+
     public void setSocket(String ip, int port) throws IOException {
         try {
             socket = new Socket(ip, port);
@@ -94,5 +114,25 @@ public class ProductActivity extends AppCompatActivity {
             System.out.println(e);
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ArrayList<ProductVO> result = intent.getParcelableArrayListExtra("resultData");
+        Log.i("ProductLog", "데이터가 정상적으로 Activity에 도달!!");
+        Log.i("resulttest", result.toString());
+
+        final ListView productListView = (ListView)findViewById(R.id.product);
+
+        ProductListViewAdapter adapter = new ProductListViewAdapter();
+        productListView.setAdapter(adapter);
+        for(ProductVO vo : result) {
+            adapter.addlitem(vo);
+        }
+        // intent에서 데이터 추출해서 ListView에 출력하는 작업을 진행
+        // 만약 그림까지 포함할려면 추가적인 작업이 더 들어가야 한다.
+        // ListVoew에 도서 제목만 일단 먼저 출력해 보고
+        // 성공하면 CustomListView를 이용해서 이미지, 제목, 저자, 가격 등의 데이터를 출력
     }
 }

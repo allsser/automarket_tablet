@@ -7,14 +7,17 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
 
         dateNow = (TextView) findViewById(R.id.dateNow);
@@ -63,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),edittext.getText().toString(), Toast.LENGTH_SHORT).show();
                         Intent i = new Intent();
                         ComponentName cname = new ComponentName("com.example.automarket",
                                 "com.example.automarket.ProductActivity");
                         i.setComponent(cname);
+                        i.putExtra("searchKeyword", edittext.getText().toString());
                         startActivity(i);
                     }
                 });
@@ -80,4 +84,5 @@ public class MainActivity extends AppCompatActivity {
                 });
         builder.show();
     }
+
 }
