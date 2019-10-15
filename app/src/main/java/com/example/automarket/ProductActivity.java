@@ -38,12 +38,13 @@ public class ProductActivity extends AppCompatActivity {
     String formatDate = sdfNow.format(date);
 
     TextView dateNow;
-
+    String api_url="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Log.i("ProductLog", "productAvtivity nocreate()");
+        api_url = Helper.getMetaData(this, "api_url");
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -62,6 +63,7 @@ public class ProductActivity extends AppCompatActivity {
                     "com.example.automarket.SearchService");
             send.setComponent(cname);
             send.putExtra("searchKeyword", searchKeyword);
+            send.putExtra("api_url",api_url);
             startService(send);
         }
 
@@ -128,10 +130,10 @@ public class ProductActivity extends AppCompatActivity {
         final ListView productListView = (ListView)findViewById(R.id.product);
 
         ProductListViewAdapter adapter = new ProductListViewAdapter();
-        productListView.setAdapter(adapter);
         for(ProductVO vo : result) {
             adapter.addlitem(vo);
         }
+        productListView.setAdapter(adapter);
         // intent에서 데이터 추출해서 ListView에 출력하는 작업을 진행
         // 만약 그림까지 포함할려면 추가적인 작업이 더 들어가야 한다.
         // ListVoew에 도서 제목만 일단 먼저 출력해 보고

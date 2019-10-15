@@ -19,14 +19,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SearchService extends Service {
-    private String api_url =  "70.12.115.50:7777/automarket";
+    private String api_url =  "";//"70.12.115.50:7777/automarket";
     private class ProductSearchRunnable implements Runnable {
         private String keyword;
-
-        ProductSearchRunnable(String keyword) {this.keyword = keyword;}
+        ProductSearchRunnable(String keyword) {
+            this.keyword = keyword;
+        }
         @Override
         public void run(){
-            String url = "http://70.12.115.50:7777/automarket/api/order/detail.do?rkey=";
+            String url = api_url+"/api/order/detail.do?rkey=";
             url = url + keyword;
 
            // Log.i("연습1",api_url.toString());
@@ -59,7 +60,7 @@ public class SearchService extends Service {
                         mapper.readValue(resultJsonData, new TypeReference<ArrayList<ProductVO>>(){});
 
                 for(ProductVO vo : myObject) {
-                    vo.drawableFromURL("70.12.115.50:7777/automarket");
+                    vo.byteFromURL(api_url);
                 }
 
                 Intent i = new Intent(getApplicationContext(), ProductActivity.class);
@@ -68,13 +69,15 @@ public class SearchService extends Service {
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                i.putParcelableArrayListExtra("resultData",myObject);
 
                 Log.i("연습4",myObject.toString());
                 String test = Integer.toString(myObject.size());
                 Log.i("사이즈",test.toString());
 
+                //i.putParcelableArrayListExtra("resultData",myObject);
+                i.putParcelableArrayListExtra("resultData",myObject);
                 startActivity(i);
+
 
             } catch (Exception e) {
                 Log.i("DATAError", e.toString());

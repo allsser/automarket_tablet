@@ -24,6 +24,9 @@
             android:enabled="true"
             android:exported="true">
         </service>
+
+        <meta-data android:name="api_url" android:value="@string/api_url" />
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:background="@color/colorAccent">
+        android:background="@color/colorWhite">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/auto"/>
+            android:src="@drawable/main_bg_car_1"/>
     </LinearLayout>
 
     <LinearLayout
@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:background="@color/colorAccent">
+        android:background="@color/colorLightGray">
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

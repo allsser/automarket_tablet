@@ -43,7 +43,8 @@ public class ProductListViewAdapter extends BaseAdapter {
         if(view == null) {
             LayoutInflater inflater =
                     (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.simple_list_item_1,viewGroup,false);
+            //view = inflater.inflate(R.layout.simple_list_item_1,viewGroup,false);
+            view = inflater.inflate(R.layout.product_item, viewGroup, false);
         }
 
 

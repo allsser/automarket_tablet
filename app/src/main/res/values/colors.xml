@@ -3,4 +3,16 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorBlue">#3c61ce</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorSky">#D9E5FF</color>
+    <color name="colorGray">#666666</color>
+    <color name="colorLightGray">#EAEAEA</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="et_bg">#D5D5D5</color>
+    <color name="bg_color">#FFFFFF</color>
+    <color name="btn_bg">#00FFFFFF</color>
+    <color name="popup_bg">#FFFFFF</color>
+    <color name="colorGreen">#009300</color>
+    <color name="colorRed">#FF0000</color>
 </resources>
