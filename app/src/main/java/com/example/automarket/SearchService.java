@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SearchService extends Service {
-
+    private String api_url =  "70.12.115.50:7777/automarket";
     private class ProductSearchRunnable implements Runnable {
         private String keyword;
 
@@ -28,6 +28,9 @@ public class SearchService extends Service {
         public void run(){
             String url = "http://70.12.115.50:7777/automarket/api/order/detail.do?rkey=";
             url = url + keyword;
+
+           // Log.i("연습1",api_url.toString());
+            Log.i("연습2",url.toString());
 
             try {
                 URL urlObj = new URL(url);
@@ -56,7 +59,7 @@ public class SearchService extends Service {
                         mapper.readValue(resultJsonData, new TypeReference<ArrayList<ProductVO>>(){});
 
                 for(ProductVO vo : myObject) {
-                    vo.drawableFromURL();
+                    vo.drawableFromURL("70.12.115.50:7777/automarket");
                 }
 
                 Intent i = new Intent(getApplicationContext(), ProductActivity.class);
@@ -66,6 +69,10 @@ public class SearchService extends Service {
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 i.putParcelableArrayListExtra("resultData",myObject);
+
+                Log.i("연습4",myObject.toString());
+                String test = Integer.toString(myObject.size());
+                Log.i("사이즈",test.toString());
 
                 startActivity(i);
 
@@ -93,6 +100,7 @@ public class SearchService extends Service {
 
         String keyword = intent.getStringExtra("searchKeyword");
 
+        api_url = intent.getExtras().getString("api_url");
         ProductSearchRunnable runnable = new ProductSearchRunnable(keyword);
         Thread t = new Thread(runnable);
         t.start();

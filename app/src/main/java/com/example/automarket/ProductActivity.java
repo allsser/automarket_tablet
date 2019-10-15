@@ -27,8 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ProductActivity extends AppCompatActivity {
 
     private Socket socket;
-    private DataInputStream dis;
-    private DataOutputStream dos;
     PrintWriter out;
 
     private String ip = "70.12.225.218"; //server연결 ip
@@ -44,6 +42,8 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i("ProductLog", "productAvtivity nocreate()");
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -65,32 +65,35 @@ public class ProductActivity extends AppCompatActivity {
             startService(send);
         }
 
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
                     setSocket(ip,port);
-                } catch (IOException e) {
+                    String data = "T/10000000/1";
+                    out.println(data);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        thread.start();
 
         Button button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Thread thread = new Thread(new Runnable() {
                     @Override
-                    public void run() {
-                        String data = "/10000104/1000007/1";
+                    public void run () {
+                        String data = "T/10000104/1000007/1";
                         out.println(data);
                         String exit = "/EXIT/";
                         out.println(exit);
                     }
                 });
                 thread.start();
+
 
                 Toast.makeText(getApplicationContext(),"감사합니다.", Toast.LENGTH_SHORT).show();
 
@@ -107,8 +110,6 @@ public class ProductActivity extends AppCompatActivity {
     public void setSocket(String ip, int port) throws IOException {
         try {
             socket = new Socket(ip, port);
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             System.out.println(e);
@@ -119,6 +120,7 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.i("ProductLog", "호출호출!!");
         ArrayList<ProductVO> result = intent.getParcelableArrayListExtra("resultData");
         Log.i("ProductLog", "데이터가 정상적으로 Activity에 도달!!");
         Log.i("resulttest", result.toString());

@@ -1,6 +1,10 @@
 package com.example.automarket;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +51,19 @@ public class ProductListViewAdapter extends BaseAdapter {
         TextView tv1 = (TextView)view.findViewById(R.id.customTv1);
         TextView tv2 = (TextView)view.findViewById(R.id.customTv2);
 
-        ProductVO vo = list.get(i);
+        final ProductVO vo = list.get(i);
 
         Log.i("출력 test",vo.getProdnm().toString());
 
-        iv.setImageDrawable(vo.getDrawable());
-        tv1.setText(vo.getProdnm());
-        tv2.setText(vo.getOrderid());
+//        iv.setImageDrawable(vo.getDrawable());
+       // Glide.with(context).load(vo.getDrawable()).into(iv);
+        tv1.setText("상품이름:"+vo.getProdnm());
+        tv2.setText("상품가격:"+vo.getProdprice());
+
+        if(vo.getThumbnailimg() !=null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
+            iv.setImageBitmap(bitmap);
+        }
 
         return view;
     }

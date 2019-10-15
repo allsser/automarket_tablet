@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+
 import java.io.InputStream;
 import java.net.URL;
 
@@ -16,8 +18,9 @@ public class ProductVO implements Parcelable {
     private int ordercnt; // 상품 개수
     private int prodprice; // 상품 가격
     private String imgpath; // 이미지
+    private byte[] thumbnailimg;
 
-    private Drawable drawable;
+    //private Drawable drawable;
 
     public static final Creator<ProductVO> CREATOR = new Creator<ProductVO>() {
         @Override
@@ -47,6 +50,8 @@ public class ProductVO implements Parcelable {
         ordercnt = parcel.readInt();
         prodprice = parcel.readInt();
         imgpath = parcel.readString();
+
+        thumbnailimg = parcel.createByteArray();
     }
 
     @Override
@@ -64,6 +69,8 @@ public class ProductVO implements Parcelable {
             parcel.writeInt(prodprice);
             parcel.writeString(imgpath);
 
+            parcel.writeByteArray(thumbnailimg);
+
         } catch (Exception e) {
             Log.i("ProcdLog", e.toString());
         }
@@ -76,6 +83,13 @@ public class ProductVO implements Parcelable {
     public int getProdprice() {return prodprice;}
     public String getImgpath() {return imgpath;}
 
+    public byte[] getImgByte() {
+        return thumbnailimg;
+    }
+    public byte[] getThumbnailimg() {
+        return thumbnailimg;
+    }
+
     public void setOrderid(String orderid) {this.orderid = orderid;}
     public void setProdid(String prodid) {this.prodid = prodid;}
     public void setProdnm(String prodnm) {this.prodnm = prodnm;}
@@ -83,22 +97,40 @@ public class ProductVO implements Parcelable {
     public void setProdprice(int prodprice) {this.prodprice = prodprice;}
     public void setImgpath(String imgpath) {this.imgpath = imgpath;}
 
+    public void setThumbnailimg(byte[] thumbnailimg) {
+        this.thumbnailimg = thumbnailimg;
+    }
 
-    public Drawable getDrawable() {return drawable;}
 
-    public void drawableFromURL() {
-        Drawable d = null;
+    //public Drawable getDrawable() {return drawable;}
 
-        String test = "http://70.12.115.50:7777/automarket"+imgpath;
+    public void drawableFromURL(String apiurl) {
+//        Drawable d = null;
+//
+//        String test = "http://70.12.115.50:7777/automarket"+imgpath;
+//
+//        try {
+//            Log.i("IMIM1",test);
+//            InputStream is = (InputStream)new URL(test).getContent();
+//            d = Drawable.createFromStream(is, "NAME");
+//            this.drawable = d;
+//
+//
+//            Log.i("IMIM",is.toString());
+//        } catch (Exception e) {
+//            Log.i("Error", e.toString());
+//        }
 
-        try {
-            Log.i("IMIM1",test);
-            InputStream is = (InputStream)new URL(test).getContent();
-            d = Drawable.createFromStream(is, "NAME");
-            this.drawable = d;
-            Log.i("IMIM",is.toString());
-        } catch (Exception e) {
-            Log.i("Error", e.toString());
+        byte[] d= null;
+        try{
+            if(imgpath!=null){
+                Log.i("automarket_app","imgpath: "+ apiurl+ imgpath);
+                this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ imgpath);
+            }
+            //this.thumbnailimg = recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
+
+        }catch (Exception e){
+            Log.e("automarket_app",e.toString());
         }
     }
 }
